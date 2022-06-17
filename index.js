@@ -64,24 +64,7 @@ const questions = () => {
         }
       }
     },
-    // {
-    //   type: 'confirm',
-    //   name: 'confirmInstallation',
-    //   message: 'Would you like to include installation instructions?',
-    //   default: true
-    // },
-    // {
-    //   type: 'input',
-    //   name: 'installation',
-    //   message: 'Please enter your installation instructions',
-    //   when: ({confirmInstallation}) => {
-    //     if (confirmInstallation) {
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //   }
-    // }
+
     {
       type: 'confirm',
       name: 'confirmUsage',
@@ -101,9 +84,33 @@ const questions = () => {
       }
     },
   ])
-  .then(projectData => {
-    return projectData;
-  })
+};
+
+const installation = readmeData => {
+  if(!readmeData.instructions) {
+    readmeData.instructions = [];
+  }
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'installation',
+      message: 'Please enter your installation instructions'
+    },
+    {
+      type: 'confirm',
+      name: 'confirmAddInstruction',
+      message: 'Would you like to add another instruction?',
+      default: true
+    },
+  ])
+  .then(installData => {
+    readmeData.instructions.push(installData);
+    if(installData.confirmAddInstruction) {
+      return installation(readmeData);
+    } else {
+      return readmeData;
+    }
+  });
 };
 
 // TODO: Create a function to write README file
@@ -129,8 +136,10 @@ const writeFile = fileContent => {
 // TODO: Create a function to initialize app
 function init() {
   questions()
-  .then(projectData => {
-    return generateMarkdown(projectData);
+  .then(installation)
+  .then(readmeData => {
+    console.log(readmeData);
+    return generateMarkdown(readmeData);
   })
   .then(readme => {
     return writeFile(readme);
