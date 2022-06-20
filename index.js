@@ -33,10 +33,10 @@ const questions = () => {
       }
     },
     {
-      type: 'checkbox',
+      type: 'list',
       name: 'license',
       message: 'Please select the license you would like to apply',
-      choices: ['MIT', 'APACHE 2.0', 'GPL 3.0','BSD 3', 'None']
+      choices: ['MIT', 'Apache_2.0', 'GPLv3','BSD_3--Clause', 'None'],
     },
     {
       type: 'input',
@@ -64,54 +64,46 @@ const questions = () => {
         }
       }
     },
-
-    {
-      type: 'confirm',
-      name: 'confirmUsage',
-      message: 'Would you like to add project usage?',
-      default: true
-    },
     {
       type: 'input',
       name: 'usage',
-      message: 'Please describe the usage of your project',
-      when: ({confirmUsage}) => {
-        if (confirmUsage) {
+      message: 'Please provide some instructions and examples for use',
+      validate: usageInput => {
+        if (usageInput) {
           return true;
         } else {
-          return false;
+          console.log('Please enter usage information!')
         }
       }
     },
-  ])
-};
-
-const installation = readmeData => {
-  if(!readmeData.instructions) {
-    readmeData.instructions = [];
-  }
-  return inquirer.prompt([
     {
       type: 'input',
       name: 'installation',
-      message: 'Please enter your installation instructions'
+      message: 'Please enter your installation instructions',
+      validate: installationInput => {
+        if (installationInput) {
+          return true;
+        } else {
+          console.log('You must enter installation instructions')
+        }
+      }
     },
     {
       type: 'confirm',
-      name: 'confirmAddInstruction',
-      message: 'Would you like to add another instruction?',
-      default: true
+      name: 'contributing',
+      message: 'Would you like to allow others to contribute?',
+      default: false
     },
-  ])
-  .then(installData => {
-    readmeData.instructions.push(installData);
-    if(installData.confirmAddInstruction) {
-      return installation(readmeData);
-    } else {
-      return readmeData;
+    {
+      type: 'input',
+      name: 'tests',
+      message: 'Please describe any tests for your project or leave blank if none',
     }
-  });
+
+  ])
 };
+
+
 
 // TODO: Create a function to write README file
 const writeFile = fileContent => {
@@ -136,7 +128,6 @@ const writeFile = fileContent => {
 // TODO: Create a function to initialize app
 function init() {
   questions()
-  .then(installation)
   .then(readmeData => {
     console.log(readmeData);
     return generateMarkdown(readmeData);
