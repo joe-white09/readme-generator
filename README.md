@@ -9,6 +9,7 @@ This is a node.js application to fill out a professional readme.md file through 
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Screenshots-and-video](#screenshots-and-video)
 - [License](#license)
 - [Contributing](#contributing)
 - [Contributors](#contributors)
@@ -20,6 +21,11 @@ First, clone this repository. Then run the command 'npm install'. Once that is c
 
 ## Usage
 By using this application, easily format a professional readme file by answering the prompts
+
+## Screenshots and video
+![screenshot](assets/images/Screenshot-1.png)
+![screenshot](assets/images/Screenshot-2.png)
+![walkthrough](assets/images/walkthrough.webm)
 
 ## License
 For More information on the MIT please see this link For More Information on this License, please check out this link (https://opensource.org/licenses/MIT)
